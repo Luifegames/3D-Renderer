@@ -57,7 +57,7 @@ public class Mesh{
     
     public Mesh(String type){
         mouseVector = new Vector(0,0,0);
-        center = new Vector(400,400 ,40);
+        center = new Vector(200,200 ,400);
         tris = new ArrayList<>(); 
         if ("Cube".equals(type)){
             Vector v1 = new Vector(-0.5f, -0.5f, -0.5f);
@@ -126,7 +126,7 @@ public class Mesh{
     
     
     public void draw(Graphics2D g){
-        angle += 1;
+        angle += 0.4;
         angle = angle%360;
         
         tris.sort(new TriComparator());

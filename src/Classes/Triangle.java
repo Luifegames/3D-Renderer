@@ -34,27 +34,24 @@ public class Triangle {
         g.drawRect((int)center.getX(),(int)center.getY(), 2, 2);
         
         
-        float[][] rotationX = {
-            {1, 0, 0, 0},
-            {0, (float) Math.cos(angle.getX()), (float)- Math.sin(angle.getX()), 0},
-            {0, (float) Math.sin(angle.getX()), (float) Math.cos(angle.getX()), 0},
-            {0, 0, 0, 1}
-        };
+        float[][] rotationX = new float[4][4];
+            rotationX[0][0] = 1;
+            rotationX[1][1] = (float) Math.cos(angle.getX());
+            rotationX[1][2] =  (float) Math.sin(angle.getX());
+            rotationX[2][1] = (float) -Math.sin(angle.getX());
+            rotationX[2][2] = (float) Math.cos(angle.getX());
+            rotationX[3][3] = 1;        
+        
 
-        float[][] rotationY = {
-            {(float) Math.cos(angle.getY()), 0, (float) Math.sin(angle.getY()), 0},
-            {0, 1, 0, 0},
-            {(float) -Math.sin(angle.getY()), 0, (float) Math.cos(angle.getY()), 0},
-            {0, 0, 0, 1}
-        };
+        float[][] rotationZ  = new float[4][4];
+            rotationZ[0][0] = (float) Math.cos(angle.getZ());
+            rotationZ[0][1] = (float) Math.sin(angle.getZ());
+            rotationZ[1][0] =  (float) -Math.sin(angle.getZ());
+            rotationZ[1][1] = (float) Math.cos(angle.getZ());
+            rotationZ[2][2] = 1;
+            rotationZ[3][3] = 1;   
 
-        float[][] rotationZ = {
-            {(float) Math.cos(angle.getZ()), (float) Math.sin(angle.getZ()), 0, 0},
-            {(float) -Math.sin(angle.getZ()), (float) Math.cos(angle.getZ()), 0, 0},
-            {0, 0, 1, 0},
-            {0, 0, 0, 1}
-        };
-
+        
        
         
         Vector line1  = new Vector();
@@ -62,7 +59,7 @@ public class Triangle {
         Vector normal = new Vector();
 
         //Ilumination
-        Vector light_direction = new Vector(0, 0, 1);
+        Vector light_direction = new Vector(0, 0, -1);
         //Normalize
         double l = (double) Math.sqrt(light_direction.getX() * light_direction.getX()
                 + light_direction.getY() * light_direction.getY()
@@ -73,14 +70,15 @@ public class Triangle {
         light_direction.setZ((float) (light_direction.getZ() / l));
 
         for (int i = 0; i < 3; i++) {
-            Vector rotated = Panel.Matmul(rotationX, v[i]);
-            rotated = Panel.Matmul(rotationY, rotated);
-            rotated = Panel.Matmul(rotationZ, rotated);
+            Vector rotated = Panel.Matmul(rotationX,v[i]);
+           // rotated  = Panel.Matmul(rotationY,rotated);
+            rotated  = Panel.Matmul(rotationZ,rotated);
+             
             Vector projected2d = Panel.Matmul(Panel.projection, rotated);
 
-            xp[i] = (int) (center.getX() +scale * projected2d.getX());
-            yp[i] = (int) (center.getY() + scale * projected2d.getY());
-            zp[i] = (int) (center.getZ() +scale * projected2d.getZ());
+            xp[i] = (int) (center.getX()  + scale * projected2d.getX());
+            yp[i] = (int) (center.getY()  + scale * projected2d.getY());
+            zp[i] = (int) (center.getZ()  + scale * projected2d.getZ());
         }
 
         line1.setX( xp[1] - xp[0]);
@@ -111,21 +109,21 @@ public class Triangle {
             normal.getY() * (yp[0] - Panel.getvCamera().getY()) +
                 normal.getZ() * (zp[0] - Panel.getvCamera().getZ()) < 0.0f)
         {
-            
+          
         }
         if (normal.getZ() < 0.0f)
-        drawTriangle(g,setShadow(dp), xp, yp);
+        drawTriangle(g,setShadow(dp));  
         
 
 
     }
 
-    public void drawTriangle(Graphics2D g,Color gp, int[] xp, int[] yp) {
+    public void drawTriangle(Graphics2D g,Color gp) {
         g.setPaint(Color.black);
         g.setStroke(new BasicStroke(2));
-       g.drawLine((int) xp[0], yp[0], xp[1], yp[1]);
-       g.drawLine((int) xp[2], yp[2], xp[0], yp[0]);
-        g.drawLine((int) xp[1], yp[1], xp[2], yp[2]);
+      // g.drawLine((int) xp[0], yp[0], xp[1], yp[1]);
+       //g.drawLine((int) xp[2], yp[2], xp[0], yp[0]);
+        //g.drawLine((int) xp[1], yp[1], xp[2], yp[2]);
         g.setPaint(gp);
         g.fillPolygon(xp, yp, 3);
     }
