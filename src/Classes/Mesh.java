@@ -21,12 +21,18 @@ class TriComparator implements java.util.Comparator<Object>{
      Triangle t1 = (Triangle) o1;
      Triangle t2 = (Triangle) o2;
      
-     float z1 = (t1.getV()[0].getZ() + t1.getV()[1].getZ() + t1.getV()[2].getZ())/3;
-     float z2 = (t2.getV()[0].getZ() + t2.getV()[1].getZ() + t2.getV()[2].getZ())/3;
-     
-     if (z1 > z2) return 1;
-     else if  (z1 < z2) return -1;
-     else return 0;
+     if (t1.getZDepth() < t2.getZDepth()) {
+         //System.out.println("1");
+         return 1;
+     }
+     else if  (t1.getZDepth() > t2.getZDepth()) {
+         //System.out.println("-1");
+         return -1;
+     }
+     else {
+         //System.out.println("0");
+         return 0;
+     }
      
     }
     
@@ -46,12 +52,12 @@ public class Mesh{
     public Mesh() {
         tris = new ArrayList<>();
         mouseVector = new Vector(0,0,0);
-        center = new Vector(200,200 ,0);
+        center = new Vector(0,0 ,0);
     }
     
     public Mesh(String type){
         mouseVector = new Vector(0,0,0);
-        center = new Vector(200,200 , scale);
+        center = new Vector(400,400 ,40);
         tris = new ArrayList<>(); 
         if ("Cube".equals(type)){
             Vector v1 = new Vector(-0.5f, -0.5f, -0.5f);
@@ -99,7 +105,6 @@ public class Mesh{
                     
                     if (s1[0].equals("f")){
                         int[] f = new int[3];
-                        System.out.println(s1[1] + " " + s1[2] + " " + s1[3]);
                         f[0] = Integer.parseInt(s1[1]) - 1;
                         f[1] = Integer.parseInt(s1[2]) - 1;
                         f[2] = Integer.parseInt(s1[3]) - 1;
@@ -121,19 +126,20 @@ public class Mesh{
     
     
     public void draw(Graphics2D g){
-        angle += 0.001;
+        angle += 1;
         angle = angle%360;
         
         tris.sort(new TriComparator());
         
         
         for(Triangle t:tris){
+          //  System.out.println(t.getZDepth());
             t.setCenter(center);
             t.setScale(scale);
-            t.setAngle(new Vector(0,angle,0));
+            t.setAngle(new Vector((float)Math.toRadians(angle),(float)Math.toRadians(angle),(float)Math.toRadians(angle)));
             t.draw(g);
         }
-     
+     //System.out.println("--------------------");
      
     }
 

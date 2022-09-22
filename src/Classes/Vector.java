@@ -4,6 +4,12 @@ package Classes;
 public class Vector {
   private float x,y,z;
 
+    public Vector(){
+        x = 0;
+        y = 0;
+        z = 0;
+    }
+  
     public Vector(float x, float y, float z) {
         this.x = x;
         this.y = y;
@@ -36,7 +42,7 @@ public class Vector {
   
     public float[][] vectToMatrix(){
         float[][] v = {
-            {x},{y},{z}};
+            {x},{y},{z},{1}};
         return v;
     }
     
@@ -44,6 +50,12 @@ public class Vector {
         
         return new Vector(x * m, y * m, z  * m);
     }
+
+    @Override
+    public String toString() {
+        return x + " " + y + " " + z;
+    }
+    
     
     
 }

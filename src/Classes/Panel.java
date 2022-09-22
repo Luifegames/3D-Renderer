@@ -1,4 +1,3 @@
-
 package Classes;
 
 import java.awt.Graphics;
@@ -8,40 +7,83 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
 
-public class Panel extends JPanel implements MouseMotionListener,MouseListener{
-   /* float fNear = 0.1f;
-    float fFar = 1000.0f;
-    float fFov = 90.0f;
-    
-    float fAspectRatio = 9/16;
-    float fFovRad = (float) (1.0f / Math.tan(fFov * 0.5f / Math.toRadians(180.0f)));*/
-    Mesh[] m = {new Mesh("src/monkey.obj"),new Mesh("src/n64model.obj"),new Mesh("src/figure.obj"),new Mesh("src/dice.obj"),new Mesh("src/circle.obj")};
-    int iMesh = 0;
-    
-    
-  //  static float[][] projection;
+public class Panel extends JPanel implements MouseMotionListener, MouseListener {
+
+    private float fNear, fFar, fFov, fAspectRatio, fFovRad;
+
+    private Mesh[] m = {new Mesh("Cube")};//{new Mesh("src/monkey.obj"), new Mesh("src/n64model.obj"), new Mesh("src/figure.obj"), new Mesh("src/dice.obj"), new Mesh("src/circle.obj")};
+    private int iMesh = 0;
+    private static Vector vCamera;
+
+    static float[][] projection;
 
     public Panel() {
-     /*   projection = new float[4][4];
-        projection[0][0] = fAspectRatio *fFovRad;
+        vCamera = new Vector(0, 1, 0);
+        fNear = 0.1f;
+        fFar = 1000.0f;
+        fFov = 94.0f;
+        fAspectRatio = 16/9;
+        fFovRad = (float) (1.0f / Math.tan(fFov * 0.5f / Math.toRadians(180.0f)));
+        projection = new float[4][4];
+        projection[0][0] = fAspectRatio * fFovRad;
         projection[1][1] = fFovRad;
-        projection[2][2] = fFar / (fFar -fNear);
+        projection[2][2] = fFar / (fFar - fNear);
         projection[3][2] = (-fFar * fNear) / (fFar - fNear);
         projection[2][3] = 1.0f;
-        projection[3][3] = 0.0f;*/
+        projection[3][3] = 0.0f;
     }
-    
-    
-    
-    
 
-   
+    public static Vector Matmul(float[][] a, float[][] b) {
+
+        Vector result = new Vector();
+        result.setX(a[0][0] * b[0][0] + a[0][1] * b[1][0] + a[0][2] * b[2][0] + b[3][0]);
+        result.setY(a[1][0] * b[0][0] + a[1][1] * b[1][0] + a[1][2] * b[2][0] + b[3][0]);
+        result.setZ(a[2][0] * b[0][0] + a[2][1] * b[1][0] + a[2][2] * b[2][0] + b[3][0]);
+        float w   = a[3][0] * b[0][0] + a[3][1] * b[1][0] + a[3][2] * b[2][0] + b[3][0];
+
+        if (w != 0) {
+            result.setX(result.getX() / w);
+            result.setY(result.getY() / w);
+            result.setZ(result.getZ() / w);
+        }
+
+        /*  int colsA = a[0].length;
+        int rowsA = a.length;
+        int colsB = b[0].length;
+        int rowsB = b.length;
+
+        if (colsA != rowsB) {
+            System.out.println("Colums of A must match rows of B");
+            return null;
+        }
+
+        float[][] result = new float[rowsA][colsB];
+
+        for (int i = 0; i < rowsA; i++) {
+            for (int j = 0; j < colsB; j++) {
+                float sum = 0;
+                for (int k = 0; k < rowsB; k++) {
+                    sum += a[i][k] * b[k][j];
+                }
+                result[i][j] = sum;
+            }
+        }*/
+        return result;
+
+    }
+
+    public static Vector Matmul(float[][] a, Vector v) {
+        float[][] b = v.vectToMatrix();
+
+        return Matmul( a,b);
+    }
+
     @Override
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         m[iMesh].draw(g2);
         setOpaque(false);
-        super.paint(g); 
+        super.paint(g);
     }
 
     @Override
@@ -50,7 +92,7 @@ public class Panel extends JPanel implements MouseMotionListener,MouseListener{
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        
+
     }
 
     @Override
@@ -59,10 +101,9 @@ public class Panel extends JPanel implements MouseMotionListener,MouseListener{
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (iMesh < m.length-1){
-            iMesh ++;
-        }
-        else{
+        if (iMesh < m.length - 1) {
+            iMesh++;
+        } else {
             iMesh = 0;
         }
     }
@@ -73,12 +114,14 @@ public class Panel extends JPanel implements MouseMotionListener,MouseListener{
 
     @Override
     public void mouseEntered(MouseEvent e) {
-   }
+    }
 
     @Override
     public void mouseExited(MouseEvent e) {
     }
-    
-    
-    
+
+    public static Vector getvCamera() {
+        return vCamera;
+    }
+
 }
