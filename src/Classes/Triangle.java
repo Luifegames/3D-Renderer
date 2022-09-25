@@ -121,9 +121,9 @@ public class Triangle {
     public void drawTriangle(Graphics2D g,Color gp) {
         g.setPaint(Color.black);
         g.setStroke(new BasicStroke(2));
-      // g.drawLine((int) xp[0], yp[0], xp[1], yp[1]);
-       //g.drawLine((int) xp[2], yp[2], xp[0], yp[0]);
-        //g.drawLine((int) xp[1], yp[1], xp[2], yp[2]);
+       g.drawLine((int) xp[0], yp[0], xp[1], yp[1]);
+       g.drawLine((int) xp[2], yp[2], xp[0], yp[0]);
+        g.drawLine((int) xp[1], yp[1], xp[2], yp[2]);
         g.setPaint(gp);
         g.fillPolygon(xp, yp, 3);
     }
