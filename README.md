@@ -1,6 +1,7 @@
 This is a small project created in java where you can render 3D models. 
 
-![Uploading ezgif-4-a201221dfd.gif…]()
+![ezgif-4-a201221dfd](https://user-images.githubusercontent.com/84816159/192123665-10da9ab4-2e2c-48fe-878e-afcdc6f3667a.gif)
+
 
 To do this you must export the projects from Blender with the following properties.
 
